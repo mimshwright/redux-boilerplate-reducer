@@ -2,8 +2,8 @@ import test from 'ava'
 import _ from 'lodash'
 import * as lib from '../src/main.js'
 
-console.log('generic-action library:')
-console.log(lib)
+// console.log('generic-action library:')
+// console.log(lib)
 
 test('createActionType()', t => {
   t.true(_.isFunction(lib.createActionType), 'createActionType() is a function')

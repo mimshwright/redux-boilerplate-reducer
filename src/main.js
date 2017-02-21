@@ -29,12 +29,16 @@ export const generateGetter = (noun) => {
   }
 }
 
+const generateReducer = (verb, noun, reducer, initialState = null) => (
+  handleAction(createActionType(verb, noun), reducer, initialState)
+)
+
 export const generateSetReducer = (noun, initialState = null) => {
-  return handleAction(createActionType('set', noun), (state, action) => action.payload, initialState)
+  return generateReducer('set', noun, (state, action) => action.payload, initialState)
 }
 
 export const generateToggleReducer = (noun, initialState = null) => {
-  return handleAction(createActionType('toggle', noun), (state, action) => !state, initialState)
+  return generateReducer('toggle', noun, state => !state, initialState)
 }
 
 const coercePayloadToType = (type) => (reducer) => {
