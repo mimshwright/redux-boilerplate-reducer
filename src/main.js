@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions'
+
 import _merge from 'lodash/merge'
 import _upperFirst from 'lodash/upperFirst'
 import _camelCase from 'lodash/camelCase'
@@ -15,10 +17,7 @@ export const generateAction = (verb, noun) => {
 
   return {
     [actionType]: actionType,
-    [actionCreatorName]: (value = null) => ({
-      type: actionType,
-      payload: value
-    })
+    [actionCreatorName]: createAction(actionType)
   }
 }
 
