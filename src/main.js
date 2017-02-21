@@ -9,33 +9,31 @@ const _pascalCase = s => _upperFirst(_camelCase(s))
 export const createActionType = (verb, noun) => _upperSnakeCase(verb) + '_' + _upperSnakeCase(noun)
 export const createActionCreatorName = (verb, noun) => _camelCase(verb) + _pascalCase(noun)
 
-const generateSetAction = (noun) => {
-  const verb = 'set'
+export const generateAction = (verb, noun) => {
   const actionType = createActionType(verb, noun)
   const actionCreatorName = createActionCreatorName(verb, noun)
+
   return {
     [actionType]: actionType,
-    [actionCreatorName]: (value) => ({
+    [actionCreatorName]: (value = null) => ({
       type: actionType,
       payload: value
     })
   }
 }
 
-const generateToggleAction = (noun) => {
-  const verb = 'toggle'
-  const actionType = createActionType(verb, noun)
-  const actionCreatorName = createActionCreatorName(verb, noun)
+export const generateGetter = (noun) => {
+  const getterName = createActionCreatorName('get', noun)
   return {
-    [actionType]: actionType,
-    [actionCreatorName]: () => ({ type: actionType })
+    [getterName]: state => state[noun]
   }
 }
 
 const boolean = (name) => _merge(
   {},
-  generateSetAction(name),
-  generateToggleAction(name)
+  generateAction('set', name),
+  generateAction('toggle', name),
+  generateGetter(name)
 )
 
 export const generateActions = {
@@ -45,7 +43,9 @@ export const generateActions = {
 const lib = {
   createActionType,
   createActionCreatorName,
-  generateActions
+  generateAction,
+  generateActions,
+  generateGetter
 }
 export default lib
 module.exports = lib

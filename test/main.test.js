@@ -2,7 +2,8 @@ import test from 'ava'
 import _ from 'lodash'
 import * as lib from '../src/main.js'
 
-console.log("generic-action library:\n" + lib)
+console.log('generic-action library:')
+console.log(lib)
 
 test('createActionType()', t => {
   t.true(_.isFunction(lib.createActionType), 'createActionType() is a function')
@@ -18,6 +19,21 @@ test('createActionCreatorName()', t => {
   t.is(lib.createActionCreatorName('set', 'foo'), 'setFoo', 'Creates action creator name for single words.')
   t.is(lib.createActionCreatorName('add ten to', 'My Value'), 'addTenToMyValue', 'Creates action creator name for multiple words.')
   t.is(lib.createActionCreatorName('add 10 to', 'My Value'), 'add10ToMyValue', 'Creates action creator name for multiple words including digits.')
+})
+
+test('generateAction()', t => {
+  t.true(_.isFunction(lib.generateAction), 'generateAction() is a function')
+  const action = lib.generateAction('flaggle', 'Mingle Moomies')
+  t.is(action.FLAGGLE_MINGLE_MOOMIES, 'FLAGGLE_MINGLE_MOOMIES', 'generates an action type based on noun and verb')
+  t.true(_.isFunction(action.flaggleMingleMoomies), 'getAction() creates a creator function')
+  t.deepEqual(action.flaggleMingleMoomies(), {type: action.FLAGGLE_MINGLE_MOOMIES, payload: null}, 'generates an action creator based on noun and verb')
+})
+
+test('generateGetter()', t => {
+  t.true(_.isFunction(lib.generateGetter), 'generateGetter() is a function')
+  const getFoo = lib.generateGetter('foo').getFoo
+  t.true(_.isFunction(getFoo), 'generateGetter() creates a function')
+  t.is(getFoo({foo: 'bar'}), 'bar', 'getter returns value based on the name of the noun.')
 })
 
 test('generateActions.boolean()', t => {
@@ -36,5 +52,8 @@ test('generateActions.boolean()', t => {
 
   t.is(booleanActions.TOGGLE_FLAG, 'TOGGLE_FLAG', 'Generated Action type called TOGGLE_FLAG')
   t.true(_.isFunction(booleanActions.toggleFlag), 'Generated an action creator called toggleFlag()')
-  t.deepEqual(booleanActions.toggleFlag(), {type: booleanActions.TOGGLE_FLAG }, 'Action creator for toggleFlag works.')
+  t.deepEqual(booleanActions.toggleFlag(), {type: booleanActions.TOGGLE_FLAG, payload: null }, 'Action creator for toggleFlag works.')
+
+  t.true(_.isFunction(booleanActions.getFlag), 'Generated a getter for flag')
+  t.is(booleanActions.getFlag({flag: true}), true, 'Getter works.')
 })
