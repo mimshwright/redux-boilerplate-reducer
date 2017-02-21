@@ -1,4 +1,5 @@
-import { createAction } from 'redux-actions'
+import { createAction, handleAction } from 'redux-actions'
+import reduceReducers from 'reduce-reducers'
 
 import _merge from 'lodash/merge'
 import _upperFirst from 'lodash/upperFirst'
@@ -28,11 +29,34 @@ export const generateGetter = (noun) => {
   }
 }
 
-const boolean = (name) => _merge(
-  {},
+export const generateSetReducer = (noun, initialState = null) => {
+  return handleAction(createActionType('set', noun), (state, action) => action.payload, initialState)
+}
+
+export const generateToggleReducer = (noun, initialState = null) => {
+  return handleAction(createActionType('toggle', noun), (state, action) => !state, initialState)
+}
+
+const coercePayloadToType = (type) => (reducer) => {
+  return (state, action) => {
+    if (action) {
+      action.payload = type(action.payload)
+    }
+    return reducer(state, action)
+  }
+}
+const coercePayloadToBoolean = coercePayloadToType(Boolean)
+
+const boolean = (name, initialState = false) => _merge(
   generateAction('set', name),
   generateAction('toggle', name),
-  generateGetter(name)
+
+  generateGetter(name),
+
+  { reducer: reduceReducers(
+    coercePayloadToBoolean(generateSetReducer(name, initialState)),
+    generateToggleReducer(name, initialState)
+  )}
 )
 
 export const generateActions = {
