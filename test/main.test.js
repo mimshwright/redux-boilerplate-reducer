@@ -92,12 +92,15 @@ test('generateSetPropertyReducer()', t => {
   let state = {firstName: 'Mims', lastName: 'Wright'}
   let action = {type: 'SET_USER_FIRST_NAME', payload: 'Mimsy'}
   let reducer = lib.generateSetPropertyReducer('user', 'firstName')
+  let actual = reducer(state, action)
   let expected = {firstName: 'Mimsy', lastName: 'Wright'}
-  t.deepEqual(reducer(state, action), expected, 'setPropertyReducer changes a property inside an object.')
+  t.deepEqual(actual, expected, 'setPropertyReducer changes a property inside an object.')
+  t.true(actual !== expected, 'Reducer should not mutate the original object.')
 
   state = {firstName: 'Mims', lastName: 'Wright'}
   action = {type: 'SET_USER_MIDDLE_NAME', payload: 'Hughes'}
   reducer = lib.generateSetPropertyReducer('user', 'middleName')
+  actual = reducer(state, action)
   expected = {firstName: 'Mims', middleName: 'Hughes', lastName: 'Wright'}
-  t.deepEqual(reducer(state, action), expected, 'setPropertyReducer can set a new property on the object.')
+  t.deepEqual(actual, expected, 'setPropertyReducer can set a new property on the object.')
 })
