@@ -1,16 +1,16 @@
 import { createAction, handleAction } from 'redux-actions'
 import reduceReducers from 'reduce-reducers'
 
-import _merge from 'lodash/merge'
-import _upperFirst from 'lodash/upperFirst'
-import _camelCase from 'lodash/camelCase'
-import _snakeCase from 'lodash/snakeCase'
+import merge from 'lodash/merge'
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
+import snakeCase from 'lodash/snakeCase'
 
-const _upperSnakeCase = s => _snakeCase(s).toUpperCase()
-const _pascalCase = s => _upperFirst(_camelCase(s))
+const upperSnakeCase = s => snakeCase(s).toUpperCase()
+const pascalCase = s => upperFirst(camelCase(s))
 
-export const createActionType = (verb, noun) => _upperSnakeCase(verb) + '_' + _upperSnakeCase(noun)
-export const createActionCreatorName = (verb, noun) => _camelCase(verb) + _pascalCase(noun)
+export const createActionType = (verb, noun) => upperSnakeCase(verb + ' ' + noun)
+export const createActionCreatorName = (verb, noun) => camelCase(verb) + pascalCase(noun)
 
 export const generateAction = (verb, noun) => {
   const actionType = createActionType(verb, noun)
@@ -29,16 +29,23 @@ export const generateGetter = (noun) => {
   }
 }
 
-const generateReducer = (verb, noun, reducer, initialState = null) => (
-  handleAction(createActionType(verb, noun), reducer, initialState)
-)
+export const generateReducer = (verb, noun, reducer, initialState = null) => {
+  const type = createActionType(verb, noun)
+  return handleAction(type, reducer, initialState)
+}
 
 export const generateSetReducer = (noun, initialState = null) => {
   return generateReducer('set', noun, (state, action) => action.payload, initialState)
 }
 
+export const generateSetPropertyReducer = (noun, property, initialState = null) => {
+  noun = noun + ' ' + property
+  const reducer = (state, action) => merge(state, {[property]: action.payload})
+  return generateReducer('set', noun, reducer, initialState)
+}
+
 export const generateToggleReducer = (noun, initialState = null) => {
-  return generateReducer('toggle', noun, state => !state, initialState)
+  return generateReducer('toggle', noun, (state, action) => !state, initialState)
 }
 
 const coercePayloadToType = (type) => (reducer) => {
@@ -51,7 +58,7 @@ const coercePayloadToType = (type) => (reducer) => {
 }
 const coercePayloadToBoolean = coercePayloadToType(Boolean)
 
-const boolean = (name, initialState = false) => _merge(
+const boolean = (name, initialState = false) => merge(
   generateAction('set', name),
   generateAction('toggle', name),
 
@@ -72,7 +79,12 @@ const lib = {
   createActionCreatorName,
   generateAction,
   generateActions,
-  generateGetter
+  generateGetter,
+
+  generateReducer,
+  generateSetReducer,
+  generateSetPropertyReducer,
+  generateToggleReducer
 }
 export default lib
 module.exports = lib

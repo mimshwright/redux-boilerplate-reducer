@@ -85,3 +85,19 @@ test('generateActions.boolean().reducer()', t => {
   action = { type: booleanActions.TOGGLE_FLAG }
   t.deepEqual(result(), true, 'Generated reducer has a toggle function')
 })
+
+test('generateSetPropertyReducer()', t => {
+  t.true(_.isFunction(lib.generateSetPropertyReducer), 'generateSetPropertyReducer() is a function')
+
+  let state = {firstName: 'Mims', lastName: 'Wright'}
+  let action = {type: 'SET_USER_FIRST_NAME', payload: 'Mimsy'}
+  let reducer = lib.generateSetPropertyReducer('user', 'firstName')
+  let expected = {firstName: 'Mimsy', lastName: 'Wright'}
+  t.deepEqual(reducer(state, action), expected, 'setPropertyReducer changes a property inside an object.')
+
+  state = {firstName: 'Mims', lastName: 'Wright'}
+  action = {type: 'SET_USER_MIDDLE_NAME', payload: 'Hughes'}
+  reducer = lib.generateSetPropertyReducer('user', 'middleName')
+  expected = {firstName: 'Mims', middleName: 'Hughes', lastName: 'Wright'}
+  t.deepEqual(reducer(state, action), expected, 'setPropertyReducer can set a new property on the object.')
+})
