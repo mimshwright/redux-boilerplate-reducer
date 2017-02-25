@@ -17,6 +17,7 @@ export const generateGetter = (noun) => {
 }
 
 export const generateBoolean = (name, initialState = false) => merge(
+  generateAction('reset', name),
   generateAction('set', name),
   generateAction('toggle', name),
 
