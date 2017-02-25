@@ -1,15 +1,15 @@
 {
-  "name": "generic-action",
+  "name": "boilerplate-reducer",
   "version": "0.0.1",
   "description": "Generate common scenarios for actions and reducers such as CRUD actions.",
-  "keywords": "redux, reducer, action, flux, boilerplate",
-  "main": "lib/main.js",
+  "keywords": "redux, reducer, action, action-creator, generic, flux, boilerplate",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mimshwright/generic-action"
+    "url": "https://github.com/mimshwright/boilerplate-reducer"
   },
   "bugs": {
-    "url": "https://github.com/mimshwright/generic-action/issues"
+    "url": "https://github.com/mimshwright/boilerplate-reducer/issues"
   },
   "author": "Mims H. Wright",
   "license": "MIT",
