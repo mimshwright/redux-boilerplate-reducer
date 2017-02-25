@@ -7,25 +7,29 @@ import merge from 'lodash/merge'
 
 import {createActionTypeName, createActionTypeValue, createActionCreatorName} from './naming'
 import {generateAction} from './generateAction'
+import {generateGetter} from './generateGetter'
 import * as reducers from './generateReducer'
 
-export const generateGetter = (noun) => {
-  const getterName = createActionCreatorName('get', noun)
-  return {
-    [getterName]: state => state[noun]
-  }
-}
+
+
+const commonActions = (name) => ([
+  generateAction('reset', name),
+  generateAction('set', name)
+])
+
+const commonReducers = (name, initialState) => ([
+  reducers.generateResetReducer(name, initialState),
+  reducers.generateSetReducer(name, initialState)
+])
 
 export const generateBoolean = (name, initialState = false) => merge(
-  generateAction('reset', name),
-  generateAction('set', name),
-  generateAction('toggle', name),
-
   generateGetter(name),
 
+  ...commonActions(name),
+  generateAction('toggle', name),
+
   { reducer: reduceReducers(
-    reducers.generateResetReducer(name, initialState),
-    reducers.generateSetReducer(name, initialState),
+    ...commonReducers(name, initialState),
     reducers.generateToggleReducer(name, initialState)
   )}
 )
