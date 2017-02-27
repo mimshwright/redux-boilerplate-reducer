@@ -1,5 +1,6 @@
 // Redux utils
 import reduceReducers from 'reduce-reducers'
+import {handleAction} from 'redux-actions'
 
 // Lodash utils
 import merge from 'lodash/merge'
@@ -17,6 +18,11 @@ const addAction = (verb, name, existingBundle, reducer, initialState) => {
   )
   return merge(existingBundle, newBundle)
 }
+
+const addReducer = (existingReducer, actionType, reducer, initialState) => reduceReducers(
+  existingReducer,
+  handleAction(actionType, reducer, initialState)
+)
 
 const commonActions = (name, initialState) => ([
   generateGetter(name),
@@ -39,6 +45,19 @@ export const commonBundle = (name, initialState = NaN, additionalActions = null)
   )
 
   if (additionalActions) {
+    if (additionalActions.reducers) {
+      let manualReducers = []
+      const actionTypes = Object.keys(additionalActions.reducers)
+      const createManualReducer = (actionType) => handleAction(actionType, additionalActions.reducers[actionType], initialState)
+      manualReducers = actionTypes.map(createManualReducer)
+      delete additionalActions.reducers
+
+      bundle.reducer = reduceReducers(
+        bundle.reducer,
+        ...manualReducers
+      )
+    }
+
     const createAdditionalAction = verb => addAction(verb, name, bundle, additionalActions[verb], initialState)
 
     // for every key (verb) passed into additionalActions,
@@ -65,6 +84,7 @@ export const generateBoolean = (name, initialState = false, additionalActions = 
 }
 
 let lib = {
+  addReducer,
   createActionTypeName,
   createActionTypeValue,
   createActionCreatorName,
