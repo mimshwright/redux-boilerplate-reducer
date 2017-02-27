@@ -6,6 +6,6 @@ import {createActionCreatorName} from './naming'
 export const generateGetter = (noun) => {
   const getterName = createActionCreatorName('get', noun)
   return {
-    [getterName]: state => state
+    [getterName]: state => state[noun]
   }
 }

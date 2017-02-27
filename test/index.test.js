@@ -27,7 +27,7 @@ test('generateBoolean()', t => {
   t.deepEqual(booleanActions.toggleFlag(), { type: booleanActions.TOGGLE_FLAG }, 'Action creator for toggleFlag works.')
 
   t.true(_.isFunction(booleanActions.getFlag), 'Generated a getter for flag')
-  t.is(booleanActions.getFlag(true), true, 'Getter works.')
+  t.is(booleanActions.getFlag({flag: true}), true, 'Getter works.')
 })
 
 test('generateBoolean().reducer()', t => {
@@ -52,4 +52,44 @@ test('generateBoolean().reducer()', t => {
 
   action = { type: booleanActions.TOGGLE_FLAG }
   t.deepEqual(result(), true, 'Generated reducer has a toggle function')
+})
+
+test('generateNumber()', t => {
+  t.true(_.isFunction(lib.generateNumber), 'generateNumber() is a function.')
+
+  let score = lib.generateNumber('score')
+  let state = score.reducer(undefined, {type: 'INIT'})
+  t.truthy(isNaN(state), 'Initial State of number is NaN by default')
+
+  score = lib.generateBoolean('score', 0)
+  state = score.reducer(undefined, {type: 'INIT'})
+  t.is(state, 0, 'initialState can be passed into the creator.')
+
+  t.is(score.SET_SCORE, 'SET_SCORE', 'Generated Action type called SET_SCORE')
+  t.true(_.isFunction(score.setScore), 'Generated an action creator called setScore()')
+  t.deepEqual(score.setScore(100), { type: score.SET_SCORE, payload: 100 }, 'Action creator for setScore works for true.')
+
+  t.is(score.RESET_SCORE, 'RESET_SCORE', 'Generated Action type called RESET_SCORE')
+  t.true(_.isFunction(score.resetScore), 'Generated an action creator called resetScore()')
+  t.deepEqual(score.resetScore(), { type: score.RESET_SCORE }, 'Action creator for resetScore works.')
+
+  t.true(_.isFunction(score.getScore), 'Generated a getter for flag')
+  t.is(score.getScore({score: 123}), 123, 'Getter works.')
+})
+
+test('extending number', t => {
+  let score = lib.generateNumber('score', 0, {
+    'double': score => score * 2,
+    'square': score => score * score
+  })
+
+  t.is(score.SET_SCORE, 'SET_SCORE', 'addAction doesn\'t affect existing actions')
+
+  t.is(score.DOUBLE_SCORE, 'DOUBLE_SCORE', 'addAction can generate an additional action type')
+  t.true(_.isFunction(score.doubleScore), 'addAction can generate an additional action creator')
+  t.is(score.reducer(150, {type: score.DOUBLE_SCORE}), 300, 'addAction can generate an additional reducer')
+
+  t.is(score.SQUARE_SCORE, 'SQUARE_SCORE', 'addAction can generate an additional action type')
+  t.true(_.isFunction(score.squareScore), 'addAction can generate an additional action creator')
+  t.is(score.reducer(10, {type: score.SQUARE_SCORE}), 100, 'addAction can generate an additional reducer')
 })
