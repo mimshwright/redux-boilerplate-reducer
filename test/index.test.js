@@ -80,7 +80,8 @@ test('generateNumber()', t => {
 test('extending number', t => {
   let score = lib.generateNumber('score', 0, {
     'double': score => score * 2,
-    'square': score => score * score
+    'square': score => score * score,
+    'addTo': (score, {payload: otherScore}) => score + otherScore
   })
 
   t.is(score.SET_SCORE, 'SET_SCORE', 'addAction doesn\'t affect existing actions')
@@ -92,4 +93,8 @@ test('extending number', t => {
   t.is(score.SQUARE_SCORE, 'SQUARE_SCORE', 'addAction can generate an additional action type')
   t.true(_.isFunction(score.squareScore), 'addAction can generate an additional action creator')
   t.is(score.reducer(10, {type: score.SQUARE_SCORE}), 100, 'addAction can generate an additional reducer')
+
+  t.is(score.ADD_TO_SCORE, 'ADD_TO_SCORE', 'addAction can generate an additional action type')
+  t.true(_.isFunction(score.addToScore), 'addAction can generate an additional action creator')
+  t.is(score.reducer(75, {type: score.ADD_TO_SCORE, payload: 25}), 100, 'addAction can generate an additional reducer')
 })
