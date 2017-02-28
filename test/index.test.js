@@ -126,7 +126,7 @@ test('addReducer()', assert => {
 test('adding reducers with additionalActions object', assert => {
   // same example using object
   let level = lib.generateNumber('level', 1, {'complete': level => level + 1})
-  
+
   const score = lib.generateBoolean('score', 0, {
     'addTo': (score, {payload: otherScore}) => score + otherScore,
     'reducers': {

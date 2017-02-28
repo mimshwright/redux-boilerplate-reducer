@@ -77,8 +77,8 @@ export const generateNumber = (name, initialState = NaN, additionalActions = nul
 export const generateBoolean = (name, initialState = false, additionalActions = null) => {
   return commonBundle(name, initialState,
     merge(
-      additionalActions,
-      {'toggle': state => !state}
+      {'toggle': state => !state},
+      additionalActions
     )
   )
 }
