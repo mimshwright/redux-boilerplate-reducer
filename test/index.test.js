@@ -1,14 +1,9 @@
 import test from 'ava'
-import _ from 'lodash'
+import {assertIsFunction} from './avaHelpers'
 import * as lib from '../src/index.js'
 
 // console.log('boilerplate-reducer library:')
 // console.log(lib)
-
-const assertIsFunction = (assert, func, message) => {
-  assert.truthy(func, 'func is defined')
-  assert.true(_.isFunction(func), message || func.name + ' is a function.')
-}
 
 test('generateBoolean()', assert => {
   assertIsFunction(assert, lib.generateBoolean)

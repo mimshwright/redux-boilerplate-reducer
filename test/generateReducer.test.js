@@ -1,79 +1,84 @@
 import test from 'ava'
+import {assertIsFunction, assertReducer} from './avaHelpers'
 import _ from 'lodash'
 import * as lib from '../src/generateReducer'
 
-test('generateReducer()', t => {
-  t.true(_.isFunction(lib.generateReducer), 'generateReducer() is a function')
+test('generateReducer()', assert => {
+  assertIsFunction(assert, lib.generateReducer)
 
-  let state = 'Mims'
-  let action = {type: 'CONVERT_TO_UPPERCASE_NAME'}
-  let reducer = lib.generateReducer('convert to uppercase', 'name', _.upperCase, '')
-  let actual = reducer(state, action)
-  let expected = 'MIMS'
-  t.is(actual, expected, 'Generates a reducer based on a noun, verb, function, and initial state.')
+  assertReducer(assert, 'Generates a reducer based on a noun, verb, function, and initial state.', {
+    reducer: lib.generateReducer('convert to uppercase', 'name', _.upperCase, ''),
+    state: 'Mims',
+    action: {type: 'CONVERT_TO_UPPERCASE_NAME'},
+    expected: 'MIMS'
+  })
 })
 
-test('generateSetReducer()', t => {
-  t.true(_.isFunction(lib.generateSetReducer), 'generateSetReducer() is a function')
+test('generateSetReducer()', assert => {
+  assertIsFunction(assert, lib.generateSetReducer)
 
-  let state = 'Mims'
-  let action = {type: 'SET_NAME', payload: 'Mimsy'}
-  let reducer = lib.generateSetReducer('name')
-  let actual = reducer(state, action)
-  let expected = 'Mimsy'
-  t.is(actual, expected, 'set reducer changes a property.')
+  assertReducer(assert, 'set reducer changes a property.', {
+    reducer: lib.generateSetReducer('name'),
+    state: 'Mims',
+    action: {type: 'SET_NAME', payload: 'Mimsy'},
+    expected: 'Mimsy'
+  })
 
-  state = undefined
-  action = {type: 'INIT'}
   let initialState = 'John Doe'
-  reducer = lib.generateSetReducer('name', initialState)
-  actual = reducer(state, action)
-  expected = initialState
-  t.deepEqual(actual, expected, 'When first called, resets the name to initial value')
+  assertReducer(assert, 'set reducer: When first called, resets the name to initial value', {
+    reducer: lib.generateSetReducer('name', initialState),
+    state: undefined,
+    action: {type: 'INIT'},
+    expected: initialState
+  })
 })
 
-test('generateResetReducer()', t => {
-  t.true(_.isFunction(lib.generateResetReducer), 'generateResetReducer() is a function')
+test('generateResetReducer()', assert => {
+  assertIsFunction(assert, lib.generateResetReducer)
 
-  let state = { score: 40000, level: 12 }
-  let action = {type: 'RESET_SCOREBOARD'}
   let initialState = {score: 0, level: 1}
-  let reducer = lib.generateResetReducer('scoreboard', initialState)
-  let actual = reducer(state, action)
-  let expected = initialState
-  t.deepEqual(actual, expected, 'Reset reducer sets a value to its initial state.')
+  assertReducer(assert, 'Reset reducer sets a value to its initial state.', {
+    reducer: lib.generateResetReducer('scoreboard', initialState),
+    state: { score: 40000, level: 12 },
+    action: {type: 'RESET_SCOREBOARD'},
+    expected: initialState
+  })
 })
 
-test('generateSetPropertyReducer()', t => {
-  t.true(_.isFunction(lib.generateSetPropertyReducer), 'generateSetPropertyReducer() is a function')
+test('generateSetPropertyReducer()', assert => {
+  assertIsFunction(assert, lib.generateSetPropertyReducer)
 
-  let state = {firstName: 'Mims', lastName: 'Wright'}
-  let action = {type: 'SET_USER_FIRST_NAME', payload: 'Mimsy'}
-  let reducer = lib.generateSetPropertyReducer('user', 'firstName')
-  let actual = reducer(state, action)
-  let expected = {firstName: 'Mimsy', lastName: 'Wright'}
-  t.deepEqual(actual, expected, 'setPropertyReducer changes a property inside an object.')
-  t.true(actual !== expected, 'Reducer should not mutate the original object.')
+  assertReducer(assert, 'setPropertyReducer changes a property inside an object.', {
+    reducer: lib.generateSetPropertyReducer('user', 'firstName'),
+    state: {firstName: 'Mims', lastName: 'Wright'},
+    action: {type: 'SET_USER_FIRST_NAME', payload: 'Mimsy'},
+    expected: {firstName: 'Mimsy', lastName: 'Wright'}
+  })
 
-  state = {firstName: 'Mims', lastName: 'Wright'}
-  action = {type: 'SET_USER_MIDDLE_NAME', payload: 'Hughes'}
-  reducer = lib.generateSetPropertyReducer('user', 'middleName')
-  actual = reducer(state, action)
-  expected = {firstName: 'Mims', middleName: 'Hughes', lastName: 'Wright'}
-  t.deepEqual(actual, expected, 'setPropertyReducer can set a new property on the object.')
+  assertReducer(assert, 'setPropertyReducer can create a new property on the object.', {
+    reducer: lib.generateSetPropertyReducer('user', 'middleName'),
+    state: {firstName: 'Mims', lastName: 'Wright'},
+    action: {type: 'SET_USER_MIDDLE_NAME', payload: 'Hughes'},
+    expected: {firstName: 'Mims', middleName: 'Hughes', lastName: 'Wright'}
+  })
 })
 
-test('generateToggleReducer()', t => {
-  t.true(_.isFunction(lib.generateToggleReducer), 'generateToggleReducer() is a function')
+test('generateToggleReducer()', assert => {
+  assertIsFunction(assert, lib.generateToggleReducer)
 
-  let state = false
-  let action = {type: 'TOGGLE_FLAG'}
   let reducer = lib.generateToggleReducer('flag', false)
-  let actual = reducer(state, action)
-  let expected = true
-  t.is(actual, expected, 'Toggle should flip false to true')
-  state = true
-  expected = false
-  actual = reducer(state, action)
-  t.is(actual, expected, 'Toggle should flip true to false')
+  let action = {type: 'TOGGLE_FLAG'}
+  assertReducer(assert, 'Toggle should flip false to true', {
+    reducer,
+    action,
+    state: null,
+    expected: true
+  })
+
+  assertReducer(assert, 'Toggle should flip true to false', {
+    reducer,
+    action,
+    state: true,
+    expected: false
+  })
 })

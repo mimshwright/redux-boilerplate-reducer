@@ -40,7 +40,7 @@ export const generateResetReducer = (noun, initialState = null) => {
  */
 export const generateSetPropertyReducer = (noun, property, initialState = null) => {
   noun = noun + ' ' + property
-  const reducer = (state, action) => merge(state, {[property]: action.payload})
+  const reducer = (state, action) => merge({}, state, {[property]: action.payload})
   return generateReducer('set', noun, reducer, initialState)
 }
 
