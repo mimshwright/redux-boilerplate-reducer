@@ -1,6 +1,7 @@
 import merge from 'lodash/merge'
 import {handleAction} from 'redux-actions'
 import {createActionTypeValue} from './naming'
+import * as commonReducers from './commonReducers'
 
 /**
  * Creates a reducer for a given verb-noun combo.
@@ -20,7 +21,7 @@ export const generateReducer = (verb, noun, reducer, initialState = null) => {
  * @param {*} initialState
  */
 export const generateSetReducer = (noun, initialState = null) => {
-  return generateReducer('set', noun, (state, action) => action.payload, initialState)
+  return generateReducer('set', noun, commonReducers.setReducer, initialState)
 }
 
 /**
@@ -29,7 +30,7 @@ export const generateSetReducer = (noun, initialState = null) => {
  * @param {*} initialState
  */
 export const generateResetReducer = (noun, initialState = null) => {
-  return generateReducer('reset', noun, (state, actions) => initialState, initialState)
+  return generateReducer('reset', noun, commonReducers.getConstantReducer(initialState), initialState)
 }
 
 /**
@@ -50,5 +51,5 @@ export const generateSetPropertyReducer = (noun, property, initialState = null) 
  * @param {*} initialState
  */
 export const generateToggleReducer = (noun, initialState = null) => {
-  return generateReducer('toggle', noun, (state, action) => !state, initialState)
+  return generateReducer('toggle', noun, commonReducers.toggleReducer, initialState)
 }
