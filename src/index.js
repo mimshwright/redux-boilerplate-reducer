@@ -8,14 +8,16 @@ import * as bundle from './bundle'
 import * as reducerGenerators from './generateReducer'
 import * as bundlePresets from './bundlePresets'
 
-let lib = {
-  generateAction,
-  generateGetter
-}
-lib = merge(lib, naming)
-lib = merge(lib, bundle)
-lib = merge(lib, reducerGenerators)
-lib = merge(lib, bundlePresets)
+let lib = merge(
+  {
+    generateAction,
+    generateGetter
+  },
+  naming,
+  bundle,
+  reducerGenerators,
+  bundlePresets
+)
 
 export default lib
 module.exports = lib
