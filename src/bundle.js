@@ -5,9 +5,8 @@ import merge from 'lodash/merge'
 import {handleAction, handleActions} from 'redux-actions'
 
 import {generateAction} from './generateAction'
-import {generateGetter} from './generateGetter'
+import {generateSelector} from './generateSelector'
 import {createActionTypeValue} from './naming'
-
 
 /**
  * Creates a 'Duck', an object containing action type constants, action creators, reducers,
@@ -15,7 +14,7 @@ import {createActionTypeValue} from './naming'
  */
 export const generateBundle = (name, initialState = NaN, additionalActions = null) => {
   let bundle = merge(
-    generateGetter(name),
+    generateSelector(name),
 
     {
       name: name,
@@ -34,8 +33,6 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
   }
   return bundle
 }
-
-
 
 /**
  * Adds a new actionType, actionCreator and reducer to an existing bundle.
