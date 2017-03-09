@@ -12,9 +12,10 @@ import {createActionTypeValue} from './naming'
  * Creates a 'Duck', an object containing action type constants, action creators, reducers,
  * and a getter.
  */
-export const generateBundle = (name, initialState = NaN, additionalActions = null) => {
+export const generateBundle = (name, initialState = NaN, additionalActions = null, customSelector = null) => {
+  let selector = customSelector || generateSelector(name)
   let bundle = merge(
-    generateSelector(name),
+    selector,
 
     {
       name: name,
