@@ -8,32 +8,6 @@ import {generateAction} from './generateAction'
 import {generateGetter} from './generateGetter'
 import {createActionTypeValue} from './naming'
 
-/**
- * Adds a new actionType, actionCreator and reducer to an existing bundle.
- */
-export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initialState) => {
-  const noun = existingBundle.name
-  const actionType = createActionTypeValue(verb, noun)
-  const newBundle = addActionToBundle(existingBundle, verb, noun)
-  return addReducerToBundle(newBundle, actionType, reducer, initialState)
-}
-
-/**
- * Adds a new action and action creator to a bundle.
- */
-export const addActionToBundle = (existingBundle, verb) => {
-  return merge(generateAction(verb, existingBundle.name), existingBundle)
-}
-
-/**
- * Adds a new reducer for an action type to an exisiting reducer.
- * Essentially a shortcut for reduceReducers combined with handleAction.
- */
-export const addReducerToBundle = (bundle, actionType, reducer, initialState) => {
-  const newBundle = merge({}, bundle)
-  newBundle.reducers[actionType] = handleAction(actionType, reducer, initialState)
-  return newBundle
-}
 
 /**
  * Creates a 'Duck', an object containing action type constants, action creators, reducers,
@@ -59,4 +33,33 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
     })
   }
   return bundle
+}
+
+
+
+/**
+ * Adds a new actionType, actionCreator and reducer to an existing bundle.
+ */
+export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initialState) => {
+  const noun = existingBundle.name
+  const actionType = createActionTypeValue(verb, noun)
+  const newBundle = addActionToBundle(existingBundle, verb, noun)
+  return addReducerToBundle(newBundle, actionType, reducer, initialState)
+}
+
+/**
+ * Adds a new action and action creator to a bundle.
+ */
+export const addActionToBundle = (existingBundle, verb) => {
+  return merge(generateAction(verb, existingBundle.name), existingBundle)
+}
+
+/**
+ * Adds a new reducer for an action type to an exisiting reducer.
+ * Essentially a shortcut for reduceReducers combined with handleAction.
+ */
+export const addReducerToBundle = (bundle, actionType, reducer, initialState) => {
+  const newBundle = merge({}, bundle)
+  newBundle.reducers[actionType] = handleAction(actionType, reducer, initialState)
+  return newBundle
 }
