@@ -11,8 +11,10 @@ const commonActions = {
 export const generateNumber = (name, initialState = NaN, additionalActions = null) => {
   return generateBundle(name, initialState,
     merge(
-      {'increment': commonReducers.incrementReducer},
-      {'decrement': commonReducers.decrementReducer},
+      {
+        'increment': commonReducers.incrementReducer,
+        'decrement': commonReducers.decrementReducer
+      },
       commonActions,
       additionalActions
     )
@@ -22,7 +24,9 @@ export const generateNumber = (name, initialState = NaN, additionalActions = nul
 export const generateBoolean = (name, initialState = false, additionalActions = null) => {
   return generateBundle(name, initialState,
     merge(
-      {'toggle': commonReducers.toggleReducer},
+      {
+        'toggle': commonReducers.toggleReducer
+      },
       commonActions,
       additionalActions
     )
@@ -32,7 +36,9 @@ export const generateBoolean = (name, initialState = false, additionalActions = 
 export const generateDate = (name, initialState = null, additionalActions = null) => {
   return generateBundle(name, initialState,
     merge(
-      {'now': commonReducers.nowReducer},
+      {
+        'now': commonReducers.nowReducer
+      },
       commonActions,
       additionalActions
     )

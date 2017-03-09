@@ -9,6 +9,8 @@ test('generateBoolean()', assert => {
   assertIsFunction(assert, bundlePresets.generateBoolean)
 
   let flag = bundlePresets.generateBoolean('flag')
+  assertIsFunction(assert, flag.reducer, 'generateActions.boolean().reducer() is a function.')
+
   let state = flag.reducer(undefined, {type: 'INIT'})
   assert.is(state, false, 'boolean is false by default')
 
@@ -28,15 +30,8 @@ test('generateBoolean()', assert => {
 
   assertIsFunction(assert, flag.getFlag)
   assert.is(flag.getFlag({flag: true}), true, 'Getter works.')
-})
 
-test('generateBoolean().reducer()', assert => {
-  const flag = bundlePresets.generateBoolean('flag')
-  const reducer = flag.reducer
-  assertIsFunction(assert, reducer, 'generateActions.boolean().reducer() is a function.')
-
-  const state = false
-
+  state = false
   let action = { type: flag.SET_FLAG, payload: true }
   assert.deepEqual(flag.reducer(state, action), true, 'Generated reducer has a setter function')
 
@@ -78,7 +73,17 @@ test('generateNumber()', assert => {
   assert.is(score.getScore({score: 123}), 123, 'Getter works.')
 })
 
+test('generateDate()', assert => {
+  assertIsFunction(assert, bundlePresets.generateDate)
+
+  let today = bundlePresets.generateDate('today', new Date())
+  let state = today.reducer(undefined, {type: 'INIT'})
+  assert.is(state.getDate(), new Date().getDate(), 'Create a new date bundle')
+  assert.is(state.getMinutes(), new Date().getMinutes(), 'Create a new date bundle')
+})
+
 test('extending a bundle', assert => {
+  let level = bundlePresets.generateNumber('level', 1, {'complete': level => level + 1})
   let score = bundlePresets.generateNumber('score', 0, {
     'double': score => score * 2,
     'square': score => score * score,
@@ -98,13 +103,8 @@ test('extending a bundle', assert => {
   assert.is(score.ADD_TO_SCORE, 'ADD_TO_SCORE', 'addAction can generate an additional action type')
   assertIsFunction(assert, score.addToScore)
   assert.is(score.reducer(75, {type: score.ADD_TO_SCORE, payload: 25}), 100, 'addAction can generate an additional reducer')
-})
 
-test('adding reducers with additionalActions object', assert => {
-  // same example using object
-  let level = bundlePresets.generateNumber('level', 1, {'complete': level => level + 1})
-
-  const score = bundlePresets.generateBoolean('score', 0)
+  // manually adding more reducers
   score.reducers[level.COMPLETE_LEVEL] = score => score + 10000
   score.reducers.ADD_MULTIPLIER = (score, {payload: multiplier}) => score * multiplier
 
