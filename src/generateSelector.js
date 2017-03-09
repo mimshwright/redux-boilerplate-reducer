@@ -3,9 +3,10 @@ import {createActionCreatorName} from './naming'
 /**
  * Returns a selector function that just returns the value based on the state.
  */
-export const generateSelector = (noun) => {
+export const generateSelector = (noun, selector = null) => {
   const selectorName = createActionCreatorName('get', noun)
+  selector = selector || (state => state[noun])
   return {
-    [selectorName]: state => state[noun]
+    [selectorName]: selector
   }
 }

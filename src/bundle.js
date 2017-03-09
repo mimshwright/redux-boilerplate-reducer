@@ -13,9 +13,8 @@ import {createActionTypeValue} from './naming'
  * and a getter.
  */
 export const generateBundle = (name, initialState = NaN, additionalActions = null, customSelector = null) => {
-  let selector = customSelector || generateSelector(name)
   let bundle = merge(
-    selector,
+    generateSelector(name, customSelector),
 
     {
       name: name,

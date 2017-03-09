@@ -10,7 +10,7 @@ test('generateBundle()', assert => {
   let foo = bundle.generateBundle('foo', 'bar', {
     'set': (_, {payload}) => payload,
     'baz': () => 'baz'
-  })
+  }, (state) => state.myFoo)
 
   assert.is(foo.name, 'foo', 'bundles have a name property')
   assert.is(foo.SET_FOO, 'SET_FOO', 'Action types are defined by generateBundle()')
@@ -20,6 +20,8 @@ test('generateBundle()', assert => {
   assertIsFunction(assert, foo.reducers.SET_FOO, 'Each key in reducers is a reducer')
   assertIsFunction(assert, foo.reducers.BAZ_FOO, 'additionalActions parameter can add additional actions and reducers')
   assertIsFunction(assert, foo.reducer, 'generateBundle() creates a reducer called reducer()')
+  assertIsFunction(assert, foo.getFoo, 'generateBundle() creates a selector')
+  assert.is(foo.getFoo({myFoo: "bar"}), "bar", "A customSelector can be provided.")
 })
 
 test('addActionToBundle()', assert => {
