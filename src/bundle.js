@@ -7,7 +7,6 @@ import {handleAction, handleActions} from 'redux-actions'
 import {generateAction} from './generateAction'
 import {generateGetter} from './generateGetter'
 import {createActionTypeValue} from './naming'
-import * as commonReducers from './commonReducers'
 
 /**
  * Adds a new actionType, actionCreator and reducer to an existing bundle.
@@ -36,6 +35,10 @@ export const addReducerToBundle = (bundle, actionType, reducer, initialState) =>
   return newBundle
 }
 
+/**
+ * Creates a 'Duck', an object containing action type constants, action creators, reducers,
+ * and a getter.
+ */
 export const generateBundle = (name, initialState = NaN, additionalActions = null) => {
   let bundle = merge(
     generateGetter(name),
@@ -47,23 +50,7 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
     }
   )
 
-  bundle = addActionAndReducerToBundle(bundle, 'set', commonReducers.setReducer, initialState)
-  bundle = addActionAndReducerToBundle(bundle, 'reset', commonReducers.resetReducer, initialState)
-
   if (additionalActions) {
-    // if (additionalActions.reducers) {
-    //   let manualReducers = []
-    //   const actionTypes = Object.keys(additionalActions.reducers)
-    //   const createManualReducer = (actionType) => handleAction(actionType, additionalActions.reducers[actionType], initialState)
-    //   manualReducers = actionTypes.map(createManualReducer)
-    //   delete additionalActions.reducers
-    //
-    //   bundle.reducer = reduceReducers(
-    //     bundle.reducer,
-    //     ...manualReducers
-    //   )
-    // }
-
     // for every key (verb) passed into additionalActions,
     // add a new action type, action creator, and reducer
     // and merge them with the bundle

@@ -7,8 +7,11 @@ import * as bundlePresets from '../src/bundlePresets'
 test('generateBundle()', assert => {
   assertIsFunction(assert, bundle.generateBundle)
 
-  let foo = bundle.generateBundle('foo', 'bar', {'baz': () => 'baz'})
-  
+  let foo = bundle.generateBundle('foo', 'bar', {
+    'set': (_, {payload}) => payload,
+    'baz': () => 'baz'
+  })
+
   assert.is(foo.name, 'foo', 'bundles have a name property')
   assert.is(foo.SET_FOO, 'SET_FOO', 'Action types are defined by generateBundle()')
   assertIsFunction(assert, foo.setFoo, 'Action creators are defined by generateBundle()')
