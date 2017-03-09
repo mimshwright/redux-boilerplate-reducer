@@ -109,3 +109,7 @@ test('extending a bundle', assert => {
   expected = 42000
   assert.is(result, expected, 'Use generate function to an existing reducer using an action not defined internally.')
 })
+
+test('generateString()', assert => {
+  assertIsFunction(assert, bundlePresets.generateString)
+})

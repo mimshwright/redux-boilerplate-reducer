@@ -35,3 +35,15 @@ export const generateBoolean = (name, initialState = false, additionalActions = 
     )
   )
 }
+
+export const generateString = (name, initialState = "", additionalActions = null) => {
+  return generateBundle(name, initialState,
+    merge (
+      {
+        'reset': getResetReducer(initialState)
+      },
+      commonActions,
+      additionalActions
+    )
+  )
+}

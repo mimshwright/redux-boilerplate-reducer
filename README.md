@@ -164,6 +164,10 @@ For more, check out the [unit tests](./test).
   - set
   - reset
   - toggle - Sets true to false and vice versa
+
+- `generateString()`
+  - set
+  - reset
 - More to come... Please send your suggestions
 
 (note: `generateBundle()` has no preset verbs.)
