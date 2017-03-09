@@ -1,6 +1,7 @@
 # Project-specific
 lib
 notes
+boilerplate-reducer-*.tgz
 
 # Logs
 logs
