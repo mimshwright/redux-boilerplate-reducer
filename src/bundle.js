@@ -12,8 +12,8 @@ import * as commonReducers from './commonReducers'
 /**
  * Adds a new actionType, actionCreator and reducer to an existing bundle.
  */
-export const addActionAndReducerToBundle = (existingBundle, verb, noun, reducer, initialState) => {
-  // console.log('Adding action for ' + createActionTypeValue(verb, name) + ' initialState = ' + initialState)
+export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initialState) => {
+  const noun = existingBundle.name
   const actionType = createActionTypeValue(verb, noun)
   const newBundle = addActionToBundle(existingBundle, verb, noun)
   return addReducerToBundle(newBundle, actionType, reducer, initialState)
@@ -22,8 +22,8 @@ export const addActionAndReducerToBundle = (existingBundle, verb, noun, reducer,
 /**
  * Adds a new action and action creator to a bundle.
  */
-export const addActionToBundle = (existingBundle, verb, noun) => {
-  return merge(generateAction(verb, noun), existingBundle)
+export const addActionToBundle = (existingBundle, verb) => {
+  return merge(generateAction(verb, existingBundle.name), existingBundle)
 }
 
 /**
@@ -41,13 +41,14 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
     generateGetter(name),
 
     {
+      name: name,
       reducers: {},
       reducer: function (state, action) { return handleActions(this.reducers, initialState).call(this, state, action) }
     }
   )
 
-  bundle = addActionAndReducerToBundle(bundle, 'set', name, commonReducers.setReducer, initialState)
-  bundle = addActionAndReducerToBundle(bundle, 'reset', name, commonReducers.resetReducer, initialState)
+  bundle = addActionAndReducerToBundle(bundle, 'set', commonReducers.setReducer, initialState)
+  bundle = addActionAndReducerToBundle(bundle, 'reset', commonReducers.resetReducer, initialState)
 
   if (additionalActions) {
     // if (additionalActions.reducers) {
@@ -67,7 +68,7 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
     // add a new action type, action creator, and reducer
     // and merge them with the bundle
     Object.keys(additionalActions).forEach((verb) => {
-      bundle = addActionAndReducerToBundle(bundle, verb, name, additionalActions[verb], initialState)
+      bundle = addActionAndReducerToBundle(bundle, verb, additionalActions[verb], initialState)
     })
   }
   return bundle

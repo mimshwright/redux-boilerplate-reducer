@@ -1,7 +1,31 @@
+import isObject from 'lodash/isObject'
 import test from 'ava'
 import {assertIsFunction} from './avaHelpers'
 import * as bundle from '../src/bundle'
 import * as bundlePresets from '../src/bundlePresets'
+
+test('generateBundle()', assert => {
+  assertIsFunction(assert, bundle.generateBundle)
+
+  let foo = bundle.generateBundle('foo', 'bar', {'baz': () => 'baz'})
+  
+  assert.is(foo.name, 'foo', 'bundles have a name property')
+  assert.is(foo.SET_FOO, 'SET_FOO', 'Action types are defined by generateBundle()')
+  assertIsFunction(assert, foo.setFoo, 'Action creators are defined by generateBundle()')
+  assert.deepEqual(foo.setFoo(1), {type: 'SET_FOO', payload: 1}, 'Action creators work as expected')
+  assert.true(isObject(foo.reducers), 'generateBundle() creates an object called reducers')
+  assertIsFunction(assert, foo.reducers.SET_FOO, 'Each key in reducers is a reducer')
+  assertIsFunction(assert, foo.reducers.BAZ_FOO, 'additionalActions parameter can add additional actions and reducers')
+  assertIsFunction(assert, foo.reducer, 'generateBundle() creates a reducer called reducer()')
+})
+
+test('addActionToBundle()', assert => {
+  assertIsFunction(assert, bundle.addActionToBundle)
+  let score = bundlePresets.generateNumber('score', 0)
+  score = bundle.addActionToBundle(score, 'invert')
+  assertIsFunction(assert, score.invertScore)
+  assert.is(score.INVERT_SCORE, 'INVERT_SCORE')
+})
 
 test('addReducerToBundle()', assert => {
   assertIsFunction(assert, bundle.addReducerToBundle)

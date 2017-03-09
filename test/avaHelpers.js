@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 export const assertIsFunction = (assert, func, message = undefined) => {
+  if (!assert || !assert.true) { throw new Error('Error in assertIsFunction(). Make sure the first argument you provide is the `assert` object.') }
   assert.true(_.isFunction(func), message || `${func.name} is a function.`)
 }
 
