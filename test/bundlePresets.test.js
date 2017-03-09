@@ -36,16 +36,15 @@ test('generateBoolean().reducer()', assert => {
   assertIsFunction(assert, reducer, 'generateActions.boolean().reducer() is a function.')
 
   const state = false
-  let result = () => reducer(state, action)
 
   let action = { type: flag.SET_FLAG, payload: true }
-  assert.deepEqual(result(), true, 'Generated reducer has a setter function')
+  assert.deepEqual(flag.reducer(state, action), true, 'Generated reducer has a setter function')
 
   action = { type: flag.SET_FLAG, payload: false }
-  assert.deepEqual(result(), false, 'Generated reducer has a setter function')
+  assert.deepEqual(flag.reducer(state, action), false, 'Generated reducer has a setter function')
 
   action = { type: flag.TOGGLE_FLAG }
-  assert.deepEqual(result(), true, 'Generated reducer has a toggle function')
+  assert.deepEqual(flag.reducer(state, action), true, 'Generated reducer has a toggle function')
 })
 
 test('generateNumber()', assert => {
@@ -105,12 +104,9 @@ test('adding reducers with additionalActions object', assert => {
   // same example using object
   let level = bundlePresets.generateNumber('level', 1, {'complete': level => level + 1})
 
-  const score = bundlePresets.generateBoolean('score', 0, {
-    'reducers': {
-      [level.COMPLETE_LEVEL]: score => score + 10000,
-      'ADD_MULTIPLIER': (score, {payload: multiplier}) => score * multiplier
-    }
-  })
+  const score = bundlePresets.generateBoolean('score', 0)
+  score.reducers[level.COMPLETE_LEVEL] = score => score + 10000
+  score.reducers.ADD_MULTIPLIER = (score, {payload: multiplier}) => score * multiplier
 
   let state = 64
   let result = score.reducer(state, {type: 'ADD_MULTIPLIER', payload: 2})

@@ -5,7 +5,6 @@ import * as generateAction from './generateAction'
 import * as generateGetter from './generateGetter'
 import * as naming from './naming'
 import * as bundle from './bundle'
-import * as reducerGenerators from './generateReducer'
 import * as bundlePresets from './bundlePresets'
 
 let lib = merge(
@@ -13,7 +12,6 @@ let lib = merge(
   generateGetter,
   naming,
   bundle,
-  reducerGenerators,
   bundlePresets
 )
 
