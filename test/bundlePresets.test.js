@@ -73,15 +73,6 @@ test('generateNumber()', assert => {
   assert.is(score.getScore({score: 123}), 123, 'Getter works.')
 })
 
-test('generateDate()', assert => {
-  assertIsFunction(assert, bundlePresets.generateDate)
-
-  let today = bundlePresets.generateDate('today', new Date())
-  let state = today.reducer(undefined, {type: 'INIT'})
-  assert.is(state.getDate(), new Date().getDate(), 'Create a new date bundle')
-  assert.is(state.getMinutes(), new Date().getMinutes(), 'Create a new date bundle')
-})
-
 test('extending a bundle', assert => {
   let level = bundlePresets.generateNumber('level', 1, {'complete': level => level + 1})
   let score = bundlePresets.generateNumber('score', 0, {

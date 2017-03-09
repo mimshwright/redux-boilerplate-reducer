@@ -19,7 +19,7 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
     {
       name: name,
       reducers: {},
-      reducer: function (state, action) { return handleActions(this.reducers, initialState).call(this, state, action) }
+      reducer: function reducer (state, action) { return handleActions(this.reducers, initialState).call(this, state, action) }
     }
   )
 

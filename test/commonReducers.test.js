@@ -1,5 +1,5 @@
 import test from 'ava'
-import {assertIsFunction, assertReducer} from './avaHelpers'
+import {assertReducer} from './avaHelpers'
 import * as lib from '../src/commonReducers'
 
 test('setReducer', assert => {
@@ -38,22 +38,6 @@ test('toggleReducer', assert => {
   })
 })
 
-test('getConstantReducer()', assert => {
-  const zeroReducer = lib.getConstantReducer(0)
-  assertIsFunction(assert, zeroReducer, 'getConstantReducer() generates a constant reducer')
-  assertReducer(assert, 'zeroReducer will always return zero.', {
-    reducer: zeroReducer,
-    state: null,
-    action: {type: 'FOO', payload: 'bar'},
-    expected: 0
-  })
-
-  const goro = {name: 'Goro', arms: 4}
-  const goroReducer = lib.getConstantReducer(goro)
-  assert.deepEqual(goroReducer({name: 'Jax', arms: 0}), goro, 'Constants can be objects.')
-  assert.is(goroReducer({name: 'Jax', arms: 0}), goro, 'Original object is not copied.')
-})
-
 test('incrementReducer()', assert => {
   let reducer = lib.incrementReducer
   assertReducer(assert, 'increments a value by 1', {
@@ -85,17 +69,3 @@ test('decrementReducer()', assert => {
     expected: 999
   })
 })
-
-test('nowReducer()', assert => {
-  assertIsFunction(assert, lib.nowReducer)
-  let now = new Date()
-  let actual = lib.nowReducer()
-  assert.is(now.getYear(), actual.getYear())
-  assert.is(now.getMonth(), actual.getMonth())
-  assert.is(now.getMinutes(), actual.getMinutes(), 'nowReducer() creates a new date object with the current time.')
-})
-
-// test ('setPropertyReducer()', assert => {
-//   let reducer = lib.setPropertyReducer
-//
-// })

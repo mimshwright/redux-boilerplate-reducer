@@ -1,5 +1,5 @@
 # Redux boilerplate-reducer
-**🚧🚧🚧 Pre 🚨 Alpha 🚧🚧🚧**
+**🚧🚧🚧 Alpha 🚧🚧🚧**
 
 Quickly create bundles of action types, action creators, and reducers with a few lines of code.
 
@@ -32,11 +32,141 @@ Actions are created by combining a "noun" and a "verb". In the case of `"ADD_TOD
 
 ## Usage
 
+### Create a simple numeric action/reducer bundle
+
+With `boilerplate-reducer`, this one-line module...
+
 ```
-// Coming Soon...
+import {generateNumber} from 'boilerplate-reducer'
+
+export default generateNumber('score', 0)
 ```
 
-Meanwhile, check out the [unit tests](./test).
+... is roughly equivalent to this...
+
+```
+const SET_SCORE = 'SET_SCORE'
+const setScore = (newScore) => ({
+  type: SET_SCORE,
+  payload: newScore
+})
+
+const RESET_SCORE = 'RESET_SCORE'
+const resetScore = () => ({
+  type: RESET_SCORE
+})
+
+const INCREMENT_SCORE = 'INCREMENT_SCORE'
+const incrementScore = (additionalScore = 1) => ({
+  type: INCREMENT_SCORE,
+  payload: additionalScore
+})
+
+const DECREMENT_SCORE = 'DECREMENT_SCORE'
+const decrementScore = (additionalScore = 1) => ({
+  type: DECREMENT_SCORE,
+  payload: additionalScore
+})
+
+// Selector
+const selectScore = state => state.score
+
+// Initial State
+const initialState = 0
+
+// Reducer
+const reducer = (previousScore = initialState, action) => {
+  switch (action.type) {
+    case RESET_SCORE:
+      return initialState
+    case SET_SCORE:
+      return action.payload
+    case INCREMENT_SCORE:
+      return previousScore + action.payload
+    case DECREMENT_SCORE:
+      return previousScore - action.payload
+    default:
+      return previousScore
+  }
+}
+
+export default {
+  name: 'score',
+  SET_SCORE,
+  setScore,
+  RESET_SCORE,
+  resetScore,
+  INCREMENT_SCORE,
+  incrementScore,
+  DECREMENT_SCORE,
+  decrementScore,
+  selectScore,
+  reducer
+}
+```
+
+#### Extend the score bundle with an additional action
+
+Add an action to double the score.
+
+```
+import {generateNumber} from 'boilerplate-reducer'
+
+export default generateNumber('score', 0, {
+  'double': score => score * 2
+})
+```
+
+Providing the object with a verb associated with a function creates an additional action-type, action-creator, and reducer inside score similar to...
+
+```
+{
+  DOUBLE_SCORE: "DOUBLE_SCORE",
+  doubleScore: () => {type: DOUBLE_SCORE},
+  reducer: (score, action) => {
+    if (action.type === "DOUBLE_SCORE") { return score * 2 }
+  }
+}
+```
+
+#### Respond to an existing action type
+
+Add an action to bump the score by 1,000 when a level is completed.
+
+```
+// Manually add the new reducer to the reducers object
+score.reducers[level.COMPLETE_LEVEL] = score => score + 1000
+
+// Reducers are automatically merged
+score.reduce(9000, {type: level.COMPLETE_LEVEL}) // 10000
+```
+
+#### Add a customized selector
+
+By default, the generated selector returns the value with the same name in the state object. However, it's very possible that your state object will be nested or have a different name than your bundle name. To provide a custom selector, just replace the old one.
+
+```
+// Manually replace selector.
+score.selectScore = (state) => state.player.currentScore
+```
+
+For more, check out the [unit tests](./test).
+
+### Types and their preset verbs
+
+- `generateNumber()`
+  - set - Sets the value to the payload value
+  - reset - Sets the value to the initial state value
+  - increment - Adds payload value to the number or adds 1 if there is no payload
+  - decrement - Subtracts payload value from the number or subtracts 1 if there is no payload
+
+- `generateBoolean()`
+  - set
+  - reset
+  - toggle - Sets true to false and vice versa
+- More to come... Please send your suggestions
+
+(note: `generateBundle()` has no preset verbs.)
 
 ## Further reading
 

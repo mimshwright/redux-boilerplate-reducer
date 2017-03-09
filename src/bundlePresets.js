@@ -4,16 +4,18 @@ import {generateBundle} from './bundle'
 import * as commonReducers from './commonReducers'
 
 const commonActions = {
-  'set': commonReducers.setReducer,
-  'reset': commonReducers.resetReducer
+  'set': commonReducers.setReducer
 }
+
+const getResetReducer = (initialState) => () => initialState
 
 export const generateNumber = (name, initialState = NaN, additionalActions = null) => {
   return generateBundle(name, initialState,
     merge(
       {
         'increment': commonReducers.incrementReducer,
-        'decrement': commonReducers.decrementReducer
+        'decrement': commonReducers.decrementReducer,
+        'reset': getResetReducer(initialState)
       },
       commonActions,
       additionalActions
@@ -25,19 +27,8 @@ export const generateBoolean = (name, initialState = false, additionalActions = 
   return generateBundle(name, initialState,
     merge(
       {
-        'toggle': commonReducers.toggleReducer
-      },
-      commonActions,
-      additionalActions
-    )
-  )
-}
-
-export const generateDate = (name, initialState = null, additionalActions = null) => {
-  return generateBundle(name, initialState,
-    merge(
-      {
-        'now': commonReducers.nowReducer
+        'toggle': commonReducers.toggleReducer,
+        'reset': getResetReducer(initialState)
       },
       commonActions,
       additionalActions
