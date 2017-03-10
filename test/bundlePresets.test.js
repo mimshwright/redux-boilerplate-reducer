@@ -28,8 +28,8 @@ test('generateBoolean()', assert => {
   assertIsFunction(assert, flag.toggleFlag)
   assert.deepEqual(flag.toggleFlag(), { type: flag.TOGGLE_FLAG }, 'Action creator for toggleFlag works.')
 
-  assertIsFunction(assert, flag.getFlag)
-  assert.is(flag.getFlag({flag: true}), true, 'Getter works.')
+  assertIsFunction(assert, flag.selectFlag)
+  assert.is(flag.selectFlag({flag: true}), true, 'Selector works.')
 
   state = false
   let action = { type: flag.SET_FLAG, payload: true }
@@ -69,8 +69,8 @@ test('generateNumber()', assert => {
   assertIsFunction(assert, score.decrementScore, 'Generated an action creator called incrementScore()')
   assert.deepEqual(score.decrementScore(), { type: score.DECREMENT_SCORE }, 'Action creator for incrementScore works.')
 
-  assertIsFunction(assert, score.getScore, 'Generated a getter for score')
-  assert.is(score.getScore({score: 123}), 123, 'Getter works.')
+  assertIsFunction(assert, score.selectScore, 'Generated a selector for score')
+  assert.is(score.selectScore({score: 123}), 123, 'Selector works.')
 })
 
 test('extending a bundle', assert => {

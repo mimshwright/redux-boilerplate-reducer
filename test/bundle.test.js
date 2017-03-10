@@ -20,8 +20,8 @@ test('generateBundle()', assert => {
   assertIsFunction(assert, foo.reducers.SET_FOO, 'Each key in reducers is a reducer')
   assertIsFunction(assert, foo.reducers.BAZ_FOO, 'additionalActions parameter can add additional actions and reducers')
   assertIsFunction(assert, foo.reducer, 'generateBundle() creates a reducer called reducer()')
-  assertIsFunction(assert, foo.getFoo, 'generateBundle() creates a selector')
-  assert.is(foo.getFoo({myFoo: 'bar'}), 'bar', 'A customSelector can be provided.')
+  assertIsFunction(assert, foo.selectFoo, 'generateBundle() creates a selector')
+  assert.is(foo.selectFoo({myFoo: 'bar'}), 'bar', 'A customSelector can be provided.')
 })
 
 test('addActionToBundle()', assert => {

@@ -36,7 +36,7 @@
     "test": "npm run lint & npm run coverage",
     "watch:test": "npm run lint & ava --watch",
     "coverage": "nyc npm run test:only",
-    "build": "babel src/index.js -o lib/index.js",
+    "build": "babel src --out-dir lib",
     "prepublish": "npm run lint && npm run test && npm run build",
     "start": "npm run fix && npm run test && npm run watch"
   },
