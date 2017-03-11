@@ -12,15 +12,14 @@ import {createActionTypeValue} from './naming'
  * Creates a 'Duck', an object containing action type constants, action creators, reducers,
  * and a getter.
  */
-export const generateBundle = (name, initialState = NaN, additionalActions = null, customSelector = null) => {
+export const generateBundle = (name, initialState = null, additionalActions = null, customSelector = null) => {
   let bundle = merge(
-    generateSelector(name, customSelector),
-
     {
-      name: name,
+      name,
       reducers: {},
-      reducer: function reducer (state, action) { return handleActions(this.reducers, initialState).call(this, state, action) }
-    }
+      reducer: () => { throw new Error('Reducer is not yet defined. Use addReducerToBundle() or addActionAndReducerToBundle()') }
+    },
+    generateSelector(name, customSelector)
   )
 
   if (additionalActions) {
@@ -31,6 +30,11 @@ export const generateBundle = (name, initialState = NaN, additionalActions = nul
       bundle = addActionAndReducerToBundle(bundle, verb, additionalActions[verb], initialState)
     })
   }
+
+  bundle.reducer = function (state, action) {
+    return handleActions(bundle.reducers, initialState)(state, action)
+  }
+
   return bundle
 }
 
@@ -48,7 +52,7 @@ export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initi
  * Adds a new action and action creator to a bundle.
  */
 export const addActionToBundle = (existingBundle, verb) => {
-  return merge(generateAction(verb, existingBundle.name), existingBundle)
+  return merge(existingBundle, generateAction(verb, existingBundle.name))
 }
 
 /**
@@ -56,7 +60,7 @@ export const addActionToBundle = (existingBundle, verb) => {
  * Essentially a shortcut for reduceReducers combined with handleAction.
  */
 export const addReducerToBundle = (bundle, actionType, reducer, initialState) => {
-  const newBundle = merge({}, bundle)
-  newBundle.reducers[actionType] = handleAction(actionType, reducer, initialState)
-  return newBundle
+  bundle.reducers[actionType] = handleAction(actionType, reducer, initialState)
+  // bundle.reducer = handleActions(bundle.reducers, initialState)
+  return bundle
 }

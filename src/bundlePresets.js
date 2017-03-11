@@ -10,17 +10,16 @@ const commonActions = {
 const getResetReducer = (initialState) => () => initialState
 
 export const generateNumber = (name, initialState = NaN, additionalActions = null) => {
-  return generateBundle(name, initialState,
-    merge(
-      {
-        'increment': commonReducers.incrementReducer,
-        'decrement': commonReducers.decrementReducer,
-        'reset': getResetReducer(initialState)
-      },
-      commonActions,
-      additionalActions
-    )
+  let allActions = merge(
+    {
+      'increment': commonReducers.incrementReducer,
+      'decrement': commonReducers.decrementReducer,
+      'reset': getResetReducer(initialState)
+    },
+    commonActions,
+    additionalActions
   )
+  return generateBundle(name, initialState, allActions)
 }
 
 export const generateBoolean = (name, initialState = false, additionalActions = null) => {
