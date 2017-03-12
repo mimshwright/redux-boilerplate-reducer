@@ -11,10 +11,14 @@ export const generateAction = (verb, noun) => {
   const actionTypeName = createActionTypeName(verb, noun)
   const actionTypeValue = createActionTypeValue(verb, noun)
   const actionCreatorName = createActionCreatorName(verb, noun)
+  const actionCreatorAliasName = createActionCreatorName(verb, "")
+
+  const actionCreator = createActionCreator(actionTypeValue)
 
   return {
     [actionTypeName]: actionTypeValue,
-    [actionCreatorName]: createActionCreator(actionTypeValue)
+    [actionCreatorName]: actionCreator,
+    [actionCreatorAliasName]: actionCreator
   }
 }
 

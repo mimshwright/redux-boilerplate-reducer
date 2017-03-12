@@ -30,6 +30,9 @@ test('addActionToBundle()', assert => {
   score = bundle.addActionToBundle(score, 'invert')
   assertIsFunction(assert, score.invertScore)
   assert.is(score.INVERT_SCORE, 'INVERT_SCORE')
+
+  assert.throws(() => { bundle.addActionToBundle(score, 'reducer') }, Error, `You can't add a reducer called 'reduce'`)
+  assert.throws(() => { bundle.addActionToBundle(score, 'reducers') }, Error, `You can't add a reducer called 'reduces'`)
 })
 
 test('addReducerToBundle()', assert => {

@@ -35,7 +35,7 @@ export const generateBundle = (name, initialState = null, additionalActions = nu
     return handleActions(bundle.reducers, initialState)(state, action)
   }
 
-  return bundle
+  return bundle 
 }
 
 /**
@@ -52,6 +52,10 @@ export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initi
  * Adds a new action and action creator to a bundle.
  */
 export const addActionToBundle = (existingBundle, verb) => {
+  const verbNormalized = verb.toLowerCase()
+  if (verbNormalized === 'reducer' || verbNormalized === 'reducers') {
+    throw new Error(`You cannot use a verb called ${verb}, this name is reserved.`)
+  }
   return merge(existingBundle, generateAction(verb, existingBundle.name))
 }
 
