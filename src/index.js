@@ -6,13 +6,15 @@ import * as generateSelector from './generateSelector'
 import * as naming from './naming'
 import * as bundle from './bundle'
 import * as bundlePresets from './bundlePresets'
+import * as commonReducers from './commonReducers'
 
 let lib = merge(
   generateAction,
   generateSelector,
   naming,
   bundle,
-  bundlePresets
+  bundlePresets,
+  commonReducers
 )
 
 export default lib
