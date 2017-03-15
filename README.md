@@ -34,12 +34,12 @@ Actions are created by combining a "noun" and a "verb". In the case of `"ADD_TOD
 
 A bundle created with `boilerplate-reducer` returns an object with the following...
 
-  - Action type constants: e.g. SET_SCORE
-  - Action creators: e.g. setScore()
-  - An alias for the action creator without the noun name: e.g. set()
-  - A selector that returns the value when given the store's state: e.g. selectScore() or select()
-  - An object containing single-purpose reducers with the actions they respond to as keys.
-  - A combined reducer called `reducer`
+  - Action type constants: e.g. `SET_SCORE`
+  - Action creators: e.g. `setScore()`
+  - An alias for the action creator without the noun name: e.g. `set()`
+  - A selector that returns the value when given the store's state: e.g. `selectScore()` or `select()`
+  - An object containing single-purpose reducers with the actions they respond to as keys called `reducers`
+  - An automatically-combined reducer called `reducer()`
 
 The `generateBundle()` function adds no actions by default but you can use the preset bundles to automatically create commonly used actions.
 
