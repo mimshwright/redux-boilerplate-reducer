@@ -30,6 +30,39 @@ Results are returned as an object bundle that follows the [Ducks modular format]
 
 Actions are created by combining a "noun" and a "verb". In the case of `"ADD_TODO"`, the verb would be `"add"` and the noun would be `"todo"`. Some string manipulation is applied so `"Add 10 to", "totalScore"` would become the action type `"ADD_10_TO_TOTAL_SCORE"` and the action creator would be called `add10ToTotalScore()`.
 
+### Bundle structure
+
+A bundle created with `boilerplate-reducer` returns an object with the following...
+
+  - Action type constants: e.g. SET_SCORE
+  - Action creators: e.g. setScore()
+  - An alias for the action creator without the noun name: e.g. set()
+  - A selector that returns the value when given the store's state: e.g. selectScore() or select()
+  - An object containing single-purpose reducers with the actions they respond to as keys.
+  - A combined reducer called `reducer`
+
+The `generateBundle()` function adds no actions by default but you can use the preset bundles to automatically create commonly used actions.
+
+#### Types and their preset verbs
+
+- `generateNumber()`
+  - set - Sets the value to the payload value
+  - reset - Sets the value to the initial state value
+  - increment - Adds payload value to the number or adds 1 if there is no payload
+  - decrement - Subtracts payload value from the number or subtracts 1 if there is no payload
+
+- `generateBoolean()`
+  - set
+  - reset
+  - toggle - Sets true to false and vice versa
+
+- `generateString()`
+  - set
+  - reset
+- More to come... Please send your suggestions
+
+(note: `generateBundle()` has no preset verbs.)
+
 ## Usage
 
 ### Create a simple numeric action/reducer bundle
@@ -50,26 +83,31 @@ const setScore = (newScore) => ({
   type: SET_SCORE,
   payload: newScore
 })
+const set = setScore
 
 const RESET_SCORE = 'RESET_SCORE'
 const resetScore = () => ({
   type: RESET_SCORE
 })
+const reset = resetScore
 
 const INCREMENT_SCORE = 'INCREMENT_SCORE'
 const incrementScore = (additionalScore = 1) => ({
   type: INCREMENT_SCORE,
   payload: additionalScore
 })
+const increment = incrementScore
 
 const DECREMENT_SCORE = 'DECREMENT_SCORE'
 const decrementScore = (additionalScore = 1) => ({
   type: DECREMENT_SCORE,
   payload: additionalScore
 })
+const decrement = decrementScore
 
 // Selector
 const selectScore = state => state.score
+const select = selectScore
 
 // Initial State
 const initialState = 0
@@ -94,13 +132,19 @@ export default {
   name: 'score',
   SET_SCORE,
   setScore,
+  set,
   RESET_SCORE,
   resetScore,
+  reset,
   INCREMENT_SCORE,
   incrementScore,
+  increment,
   DECREMENT_SCORE,
   decrementScore,
+  decrement,
   selectScore,
+  select,
+  reducers,
   reducer
 }
 ```
@@ -151,26 +195,6 @@ score.selectScore = (state) => state.player.currentScore
 ```
 
 For more, check out the [unit tests](./test).
-
-### Types and their preset verbs
-
-- `generateNumber()`
-  - set - Sets the value to the payload value
-  - reset - Sets the value to the initial state value
-  - increment - Adds payload value to the number or adds 1 if there is no payload
-  - decrement - Subtracts payload value from the number or subtracts 1 if there is no payload
-
-- `generateBoolean()`
-  - set
-  - reset
-  - toggle - Sets true to false and vice versa
-
-- `generateString()`
-  - set
-  - reset
-- More to come... Please send your suggestions
-
-(note: `generateBundle()` has no preset verbs.)
 
 ## Further reading
 
