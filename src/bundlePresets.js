@@ -3,20 +3,21 @@ import merge from 'lodash/merge'
 import {generateBundle} from './bundle'
 import * as commonReducers from './commonReducers'
 
-const commonActions = {
-  'set': commonReducers.setReducer
-}
-
 const getResetReducer = (initialState) => () => initialState
+
+const getCommonActions = (initialState) => ({
+  'set': commonReducers.setReducer,
+  'reset': getResetReducer(initialState)
+})
+
 
 export const generateNumber = (name, initialState = NaN, additionalActions = null) => {
   let allActions = merge(
     {
       'increment': commonReducers.incrementReducer,
-      'decrement': commonReducers.decrementReducer,
-      'reset': getResetReducer(initialState)
+      'decrement': commonReducers.decrementReducer
     },
-    commonActions,
+    getCommonActions(initialState),
     additionalActions
   )
   return generateBundle(name, initialState, allActions)
@@ -27,9 +28,8 @@ export const generateBoolean = (name, initialState = false, additionalActions = 
     merge(
       {
         'toggle': commonReducers.toggleReducer,
-        'reset': getResetReducer(initialState)
       },
-      commonActions,
+      getCommonActions(initialState),
       additionalActions
     )
   )
@@ -39,9 +39,8 @@ export const generateString = (name, initialState = '', additionalActions = null
   return generateBundle(name, initialState,
     merge(
       {
-        'reset': getResetReducer(initialState)
       },
-      commonActions,
+      getCommonActions(initialState),
       additionalActions
     )
   )

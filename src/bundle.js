@@ -16,8 +16,7 @@ export const generateBundle = (name, initialState = null, additionalActions = nu
   let bundle = merge(
     {
       name,
-      reducers: {},
-      reducer: () => { throw new Error('Reducer is not yet defined. Use addReducerToBundle() or addActionAndReducerToBundle()') }
+      reducers: {}
     },
     generateSelector(name, customSelector)
   )
@@ -35,7 +34,7 @@ export const generateBundle = (name, initialState = null, additionalActions = nu
     return handleActions(bundle.reducers, initialState)(state, action)
   }
 
-  return bundle 
+  return bundle
 }
 
 /**

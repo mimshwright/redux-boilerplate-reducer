@@ -73,6 +73,22 @@ test('generateNumber()', assert => {
   assert.is(score.selectScore({score: 123}), 123, 'Selector works.')
 })
 
+test('generateString()', assert => {
+  assertIsFunction(assert, bundlePresets.generateString)
+
+  let name = bundlePresets.generateString('name')
+  let state = name.reducer(undefined, {type: 'INIT'})
+  assert.is(state, '', 'Initial State of string is "" by default')
+
+  name = bundlePresets.generateString('name', 'mims')
+  state = name.reducer(undefined, {type: 'INIT'})
+  assert.is(state, 'mims', 'initialState can be passed into the creator.')
+
+  assertIsFunction(assert, name.setName, 'Generated an action creator called setName()')
+  assertIsFunction(assert, name.resetName, 'Generated an action creator called resetName()')
+  assertIsFunction(assert, name.selectName, 'Generated a selector for name')
+})
+
 test('extending a bundle', assert => {
   let level = bundlePresets.generateNumber('level', 1, {'complete': level => level + 1})
   let score = bundlePresets.generateNumber('score', 0, {

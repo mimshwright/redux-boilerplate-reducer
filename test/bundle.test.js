@@ -24,6 +24,12 @@ test('generateBundle()', assert => {
   assert.is(foo.selectFoo({myFoo: 'bar'}), 'bar', 'A customSelector can be provided.')
 })
 
+test('empty bundle', assert => {
+  const foo = bundle.generateBundle('test', 0)
+  const result = foo.reducer(5678, {type: 'TEST'})
+  assert.is(result, 5678, "Bundles with no defined reducers just return the current state.")
+})
+
 test('addActionToBundle()', assert => {
   assertIsFunction(assert, bundle.addActionToBundle)
   let score = bundlePresets.generateNumber('score', 0)
