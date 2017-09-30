@@ -1,69 +1,91 @@
 // Lodash utils
-import merge from 'lodash/merge'
+import merge from "lodash/merge";
 
 // import reduceReducers from 'reduce-reducers'
-import {handleAction, handleActions} from 'redux-actions'
+import { handleAction, handleActions } from "redux-actions";
 
-import {generateAction} from './generateAction'
-import {generateSelector} from './generateSelector'
-import {createActionTypeValue} from './naming'
+import { generateAction } from "./generateAction";
+import { generateSelector } from "./generateSelector";
+import { createActionTypeValue } from "./naming";
 
 /**
  * Creates a 'Duck', an object containing action type constants, action creators, reducers,
  * and a getter.
  */
-export const generateBundle = (name, initialState = null, additionalActions = null, customSelector = null) => {
+export const generateBundle = (
+  name,
+  initialState = null,
+  additionalActions = null,
+  customSelector = null
+) => {
   let bundle = merge(
     {
       name,
-      reducers: {}
+      reducers: {},
     },
     generateSelector(name, customSelector)
-  )
+  );
 
   if (additionalActions) {
     // for every key (verb) passed into additionalActions,
     // add a new action type, action creator, and reducer
     // and merge them with the bundle
-    Object.keys(additionalActions).forEach((verb) => {
-      bundle = addActionAndReducerToBundle(bundle, verb, additionalActions[verb], initialState)
-    })
+    Object.keys(additionalActions).forEach(verb => {
+      bundle = addActionAndReducerToBundle(
+        bundle,
+        verb,
+        additionalActions[verb],
+        initialState
+      );
+    });
   }
 
-  bundle.reducer = function (state, action) {
-    return handleActions(bundle.reducers, initialState)(state, action)
-  }
+  bundle.reducer = function(state, action) {
+    return handleActions(bundle.reducers, initialState)(state, action);
+  };
 
-  return bundle
-}
+  return bundle;
+};
 
 /**
  * Adds a new actionType, actionCreator and reducer to an existing bundle.
  */
-export const addActionAndReducerToBundle = (existingBundle, verb, reducer, initialState) => {
-  const noun = existingBundle.name
-  const actionType = createActionTypeValue(verb, noun)
-  const newBundle = addActionToBundle(existingBundle, verb, noun)
-  return addReducerToBundle(newBundle, actionType, reducer, initialState)
-}
+export const addActionAndReducerToBundle = (
+  existingBundle,
+  verb,
+  reducer,
+  initialState
+) => {
+  const noun = existingBundle.name;
+  const actionType = createActionTypeValue(verb, noun);
+  const newBundle = addActionToBundle(existingBundle, verb, noun);
+  return addReducerToBundle(newBundle, actionType, reducer, initialState);
+};
 
 /**
  * Adds a new action and action creator to a bundle.
  */
 export const addActionToBundle = (existingBundle, verb) => {
-  const verbNormalized = verb.toLowerCase()
-  if (verbNormalized === 'reducer' || verbNormalized === 'reducers') {
-    throw new Error(`You cannot use a verb called ${verb}, this name is reserved.`)
+  const verbNormalized = verb.toLowerCase();
+  if (verbNormalized === "reducer" || verbNormalized === "reducers") {
+    throw new Error(
+      `You cannot use a verb called ${verb}, this name is reserved.`
+    );
   }
-  return merge(existingBundle, generateAction(verb, existingBundle.name))
-}
+  return merge(existingBundle, generateAction(verb, existingBundle.name));
+};
 
 /**
  * Adds a new reducer for an action type to an exisiting reducer.
  * Essentially a shortcut for reduceReducers combined with handleAction.
  */
-export const addReducerToBundle = (bundle, actionType, reducer, initialState) => {
-  bundle.reducers[actionType] = handleAction(actionType, reducer, initialState)
+export const addReducerToBundle = (
+  bundle,
+  actionType,
+  reducer,
+  initialState
+) => {
+  bundle.reducers[actionType] = handleAction(actionType, reducer, initialState);
   // bundle.reducer = handleActions(bundle.reducers, initialState)
-  return bundle
-}
+  return bundle;
+};

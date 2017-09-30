@@ -1,12 +1,12 @@
 // Lodash utils
-import merge from 'lodash/merge'
+import merge from "lodash/merge";
 
-import * as generateAction from './generateAction'
-import * as generateSelector from './generateSelector'
-import * as naming from './naming'
-import * as bundle from './bundle'
-import * as bundlePresets from './bundlePresets'
-import * as commonReducers from './commonReducers'
+import * as generateAction from "./generateAction";
+import * as generateSelector from "./generateSelector";
+import * as naming from "./naming";
+import * as bundle from "./bundle";
+import * as bundlePresets from "./bundlePresets";
+import * as commonReducers from "./commonReducers";
 
 let lib = merge(
   generateAction,
@@ -15,7 +15,7 @@ let lib = merge(
   bundle,
   bundlePresets,
   commonReducers
-)
+);
 
-export default lib
-module.exports = lib
+export default lib;
+module.exports = lib;
