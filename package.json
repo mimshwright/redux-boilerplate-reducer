@@ -1,6 +1,6 @@
 {
   "name": "boilerplate-reducer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate common scenarios for actions and reducers such as CRUD actions.",
   "keywords": "redux, reducer, action, action-creator, generic, flux, boilerplate",
   "main": "lib/index.js",
