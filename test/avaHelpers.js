@@ -16,11 +16,13 @@ export const assertReducer = (
 ) => {
   assertIsFunction(assert, reducer);
   let actual = reducer(state, action);
+
   assert.deepEqual(
     actual,
     expected,
     message || `${reducer.name} works as expected.`
   );
+
   if (_.isObject(actual)) {
     assert.true(
       state !== actual,
