@@ -25,7 +25,7 @@
     "tap-spec": "^4.1.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "redux-actions": "^2.2.1"
   },
   "optionalDependencies": {
